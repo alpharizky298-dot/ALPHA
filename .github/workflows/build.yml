@@ -2,29 +2,74 @@ name: ALPHA Build & Test
 
 on:
   push:
+    branches:
+      - main
+      - master
+
   pull_request:
 
 jobs:
   build:
+    name: Build and Test ALPHA
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+
+      # =========================
+      # CHECKOUT
+      # =========================
+
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # =========================
+      # INSTALL DEPENDENCIES
+      # =========================
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libssl-dev
+          sudo apt-get install -y \
+            cmake \
+            g++ \
+            libssl-dev
 
-      - name: Configure
-        run: |
-          cmake -S . -B build
 
-      - name: Build
-        run: |
-          cmake --build build
+      # =========================
+      # CONFIGURE
+      # =========================
 
-      - name: Test
+      - name: Configure CMake
         run: |
-          ctest --test-dir build --output-on-failure
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release
+
+
+      # =========================
+      # BUILD
+      # =========================
+
+      - name: Build ALPHA
+        run: |
+          cmake --build build --parallel
+
+
+      # =========================
+      # TEST
+      # =========================
+
+      - name: Run tests
+        run: |
+          ctest \
+            --test-dir build \
+            --output-on-failure
+
+
+      # =========================
+      # RUN NODE
+      # =========================
+
+      - name: Run ALPHA node
+        run: |
+          ./build/alpha_node
