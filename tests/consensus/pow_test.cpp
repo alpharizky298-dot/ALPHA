@@ -1,21 +1,22 @@
 #include <cassert>
+#include <string>
 
-#include "../../src/block/block.h"
+#include "../../src/consensus/pow.h"
 
 int main() {
-    alpha::BlockHeader header{
-        1,
-        0,
-        4,
-        0,
-        "0",
-        "0"
-    };
+    assert(
+        alpha::consensus::valid_proof(
+            "0000abcdef",
+            4
+        )
+    );
 
-    alpha::Block block(header);
-
-    assert(block.header().version == 1);
-    assert(block.header().previous_hash == "0");
+    assert(
+        !alpha::consensus::valid_proof(
+            "0001abcdef",
+            4
+        )
+    );
 
     return 0;
 }
