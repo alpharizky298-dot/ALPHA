@@ -1,14 +1,24 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(ALPHA
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "ALPHA Proof-of-Work blockchain"
     LANGUAGES CXX
 )
 
+# =========================
+# C++ STANDARD
+# =========================
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# =========================
+# OPENSSL
+# =========================
+
+find_package(OpenSSL REQUIRED)
 
 # =========================
 # ALPHA CORE
@@ -26,6 +36,11 @@ add_library(alpha_core
 target_include_directories(alpha_core
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(alpha_core
+    PUBLIC
+        OpenSSL::Crypto
 )
 
 # =========================
@@ -50,6 +65,7 @@ enable_testing()
 
 # Crypto test
 add_executable(hash_test
+
     tests/crypto/hash_test.cpp
 )
 
@@ -65,6 +81,7 @@ add_test(
 
 # Block test
 add_executable(block_test
+
     tests/block/block_test.cpp
 )
 
@@ -80,6 +97,7 @@ add_test(
 
 # Proof-of-Work test
 add_executable(pow_test
+
     tests/consensus/pow_test.cpp
 )
 
