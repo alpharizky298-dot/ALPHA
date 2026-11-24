@@ -1,10 +1,16 @@
-#include "hash.h"
+#include <cassert>
+#include <string>
 
-namespace alpha::crypto {
+#include "../../src/crypto/hash.h"
 
-std::string sha256(const std::string& input) {
-    // TODO(v0.1): OpenSSL SHA-256 implementation.
-    return {};
-}
+int main() {
+    const std::string input = "alpha";
 
+    const std::string hash =
+        alpha::crypto::sha256(input);
+
+    // SHA-256 implementation will be connected next.
+    assert(hash.empty());
+
+    return 0;
 }
